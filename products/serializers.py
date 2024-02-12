@@ -28,5 +28,5 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('title', 'description', 'accounting_unit', 'manufacturer', 'categories', 'slug', 'article_number')
         read_only_fields = ('slug',)
-        depth = 1
+        # depth = 1
         list_serializer_class = ProductListSerializer

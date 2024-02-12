@@ -46,7 +46,7 @@ class Product(models.Model):
     image = models.ImageField(verbose_name='Фотографии', upload_to='products/%Y%m%d/', blank=True, null=True)
     accounting_unit = models.CharField(max_length=15, verbose_name='Единица хранения')
     manufacturer = models.CharField(max_length=250, verbose_name='Производитель')
-    article_number = models.IntegerField(verbose_name='Артикул', blank=True)
+    article_number = models.IntegerField(verbose_name='Артикул', blank=True, null=True)
     categories = TreeForeignKey(to=Category,
                                 on_delete=models.PROTECT,
                                 related_name='items',
