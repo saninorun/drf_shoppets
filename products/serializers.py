@@ -7,6 +7,9 @@ from products.models import Product, Category
 
 class ProductListSerializer(serializers.ListSerializer):
     def create(self, validated_data: list[OrderedDict]):
+        """
+        Создание поля 'slug' в случае его отсутсвия перед сохранением списка товаров в базу данных.
+        """
         for product in validated_data:
             if not product.get('slug', False):
                 product.update(slug=slugify(product['title']))
@@ -17,7 +20,7 @@ class ProductListSerializer(serializers.ListSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('title', 'description', 'image')
+        fields = ('title', 'description', 'image', 'slug')
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -25,4 +28,5 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('title', 'description', 'accounting_unit', 'manufacturer', 'categories', 'slug', 'article_number')
         read_only_fields = ('slug',)
+        depth = 1
         list_serializer_class = ProductListSerializer

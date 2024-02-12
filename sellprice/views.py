@@ -3,11 +3,15 @@ from datetime import datetime
 from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
 
-from sellprice.models import SellPrice
-from sellprice.serializers import SellPriceSerializer
+from sellprice.models import SellPrice, SellDiscount
+from sellprice.serializers import SellPriceSerializer, SellDiscountSerializer
 
 
-class SellPriceListView(viewsets.ModelViewSet):
-    queryset = SellPrice.objects.filter(start_date__gte=datetime.now())
+class SellPriceView(viewsets.ModelViewSet):
+    queryset = SellPrice.objects.all()
     serializer_class = SellPriceSerializer
 
+
+class SellDiscountView(viewsets.ModelViewSet):
+    queryset = SellDiscount.objects.all()
+    serializer_class = SellDiscountSerializer

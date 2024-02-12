@@ -13,4 +13,5 @@ class CategoryAdmin(DjangoMpttAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title',)
+    list_display = ('id', 'title', 'manufacturer', 'categories')
+    list_display_links = ('title',)

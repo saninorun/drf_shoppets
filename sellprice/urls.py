@@ -1,18 +1,24 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from products import views
+from sellprice import views
 
-# from rest_framework.routers import DefaultRouter
-#
+from rest_framework.routers import DefaultRouter
+
 # router = DefaultRouter()
-# router.register(r'item', views.ProductViewSet, basename='items')
+# router.register(r'sellprice', views.SellPriceListView, basename='sellprice')
 
 
-app_name = 'products'
+app_name = 'sellprice'
 urlpatterns = [
-    path('products/', views.list_add_products, name='list-add-products'),
-    path('products/<slug:slug>/', views.get_update_product, name='get_update_product'),
-    path('categories/', views.CategoryList.as_view(), name='list-add-category'),
-    path('categories/<slug:slug>/', views.CategoryView.as_view(), name='get_update_category'),
+    # path('', include(router.urls), name='sellprice'),
+    path('sellprice/', views.SellPriceView.as_view({'get': 'list', 'post': 'create'}), name='list-add-sellprice'),
+    path('sellprice/<int:pk>/',
+         views.SellPriceView.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}),
+         name='get_update_product'),
+    path('discountprice/', views.SellDiscountView.as_view({'get': 'list', 'post': 'create'}),
+         name='list-add-discountprice'),
+    path('discountprice/<int:pk>/',
+         views.SellDiscountView.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}),
+         name='get_update_discountprice'),
 ]

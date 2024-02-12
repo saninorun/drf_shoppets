@@ -8,7 +8,7 @@ from pytils.translit import slugify
 class Category(MPTTModel):
     title = models.CharField(max_length=250, verbose_name='Наименование', unique=True)
     description = models.TextField(verbose_name='Описание категории', blank=True)
-    slug = models.SlugField(verbose_name='URL', unique=True)
+    slug = models.SlugField(verbose_name='URL', unique=True, blank=True, null=True)
     image = models.ImageField(verbose_name='Фотография', upload_to='category/%Y%m%d/', blank=True)
     parent = TreeForeignKey(to='self',
                             on_delete=models.PROTECT,
@@ -31,8 +31,8 @@ class Category(MPTTModel):
 
     def save(self, *args, **kwargs):
         """
-        Дополнение стандартного наследуемого метода сохранение модели в базу данных,
-        в случае отсутсвия заначния переменной 'slug' при заполении модели.
+        Дополнение родительского метода сохранения модели в базу данных,
+        в случае отсутствия значния переменной 'slug' при заполнении  поля модели.
         """
         if not self.slug:
             self.slug = slugify(self.title)
@@ -63,8 +63,8 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Дополнение стандартного наследуемого метода сохранение модели в базу данных,
-        в случае отсутсвия заначния переменной 'slug' при заполении модели.
+        Дополнение родительского метода сохранения модели в базу данных,
+        в случае отсутствия значния переменной 'slug' при заполнении поля модели.
         """
 
         if not self.slug:
