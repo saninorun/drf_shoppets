@@ -1,7 +1,8 @@
 from django.http import HttpRequest
 from django.shortcuts import render, get_list_or_404
 from rest_framework import status, viewsets, mixins
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes, renderer_classes
 from rest_framework.generics import CreateAPIView, ListCreateAPIView, get_object_or_404
 from rest_framework import generics
@@ -15,8 +16,8 @@ from products.serializers import ProductSerializer, CategorySerializer
 
 
 @api_view(['GET', 'POST'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
-# @permission_classes([IsAuthenticatedOrReadOnly, ])
+# @authentication_classes([JWTAuthentication, SessionAuthentication, BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated, ])
 # @renderer_classes([TemplateHTMLRenderer])
 def list_add_products(request: HttpRequest | Request) -> Response:
     if request.method == 'GET':
@@ -36,8 +37,8 @@ def list_add_products(request: HttpRequest | Request) -> Response:
 
 
 @api_view(['GET', 'PUT'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
-# @permission_classes([IsAuthenticatedOrReadOnly, ])
+# @authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticatedOrReadOnly, ])
 def get_update_product(request: HttpRequest | Request, slug: str = None) -> Response:
     if request.method == 'GET':
         product = get_object_or_404(Product, slug=slug)
@@ -58,12 +59,12 @@ def get_update_product(request: HttpRequest | Request, slug: str = None) -> Resp
 class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     # renderer_classes = [JSONRenderer]
 
 
 class CategoryView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     lookup_field = 'slug'
