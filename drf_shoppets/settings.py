@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     'users.apps.UsersConfig',
     'warehouse.apps.WarehouseConfig',
+    'cart.apps.CartConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -128,6 +130,7 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
     ]
 }
 

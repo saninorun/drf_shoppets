@@ -2,7 +2,9 @@ from collections import OrderedDict
 from pytils.translit import slugify
 from rest_framework import serializers
 
-from products.models import Product, Category
+from .models import Order, OrderItem
+
+
 #
 #
 # class ProductListSerializer(serializers.ListSerializer):
@@ -17,16 +19,164 @@ from products.models import Product, Category
 #         return Product.objects.bulk_create(objs=products)
 #
 #
-# class CategorySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Category
-#         fields = ('title', 'description', 'image', 'slug')
-#
-#
-# class ProductSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Product
-#         fields = ('title', 'description', 'accounting_unit', 'manufacturer', 'categories', 'slug', 'article_number')
-#         read_only_fields = ('slug',)
-#         depth = 1
-#         list_serializer_class = ProductListSerializer
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ('product', 'quantity', 'sell_price', 'discount_price')
+
+
+class OrderSerializer(serializers.ModelSerializer):
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    orderitems = OrderItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ('user', 'time_created', 'time_updated', 'is_paid', 'is_completed', 'orderitems')
+        read_only_fields = ('time_created', 'time_updated', 'is_paid', 'is_completed',)

@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 class Order(models.Model):
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='order')
+    user = models.ForeignKey(to=User, on_delete=models.PROTECT, related_name='order')
     time_created = models.DateTimeField(auto_now_add=True)
     time_updated = models.DateTimeField(auto_now=True)
     is_completed = models.BooleanField(default=False)
@@ -19,7 +19,7 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
 
     def __str__(self):
-        return f'Заказ №{self.id}'
+        return f'№{self.id}'
 
 
 class OrderItem(models.Model):
@@ -28,7 +28,12 @@ class OrderItem(models.Model):
     product = models.ForeignKey(to=Product, on_delete=models.PROTECT, related_name='orderitems',
                                 verbose_name='Товар')
     sell_price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='Цена за штуку')
-    discount_price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='Цена с учетом скидки')
+    discount_price = models.DecimalField(max_digits=7,
+                                         decimal_places=2,
+                                         verbose_name='Цена с учетом скидки',
+                                         null=True,
+                                         blank=True
+                                         )
     quantity = models.IntegerField(default=1, verbose_name='Количество')
 
     class Meta:

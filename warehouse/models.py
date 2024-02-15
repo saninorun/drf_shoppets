@@ -24,9 +24,9 @@ class WarehouseOrderItem(models.Model):
     warehouseorder = models.ForeignKey(to=WarehouseOrder, on_delete=models.CASCADE,
                                        related_name='warehouseorderitems',
                                        verbose_name='Поставка номер')
-    product = models.ForeignKey(to=Product, on_delete=models.PROTECT, related_name='orderitems',
+    product = models.ForeignKey(to=Product, on_delete=models.PROTECT, related_name='warehouseorderitem',
                                 verbose_name='Товар')
-    purchase_price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='Цена за штуку')
+    purchase_price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='Цена покупки')
     quantity = models.IntegerField(default=1, verbose_name='Количество')
 
     class Meta:
