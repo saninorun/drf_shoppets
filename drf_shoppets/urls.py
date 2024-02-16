@@ -7,8 +7,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('products.urls', namespace='products')),
-    path('api/v1/', include('sellprice.urls', namespace='sellprice')),
-    path('api/v1/', include('orders.urls', namespace='orders')),
+    # path('api/v1/', include('sellprice.urls', namespace='sellprice')),
+    # path('api/v1/', include('orders.urls', namespace='orders')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.urls.authtoken')),
