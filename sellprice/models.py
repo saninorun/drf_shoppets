@@ -26,6 +26,9 @@ class SellPrice(models.Model):
         ordering = ("product", "start_date")
         verbose_name = "Цена номенклатуры"
         verbose_name_plural = "Цены номенклатуры"
+        constraints = (
+            models.UniqueConstraint(fields=['product', 'start_date'], name='unique_sell_price')
+        )
 
     def __str__(self):
         return str(self.price)
@@ -38,9 +41,14 @@ class SellDiscount(models.Model):
         related_name="sell_discount",
         verbose_name="Товар",
     )
-    discount = models.IntegerField(
+    discount_procent = models.IntegerField(
         verbose_name="Скидка в процентах",
         validators=[MinValueValidator(0), MaxValueValidator(50)],
+        blank=True,
+    )
+    discount = models.IntegerField(
+        verbose_name="Скидка в валюте продажи",
+        blank=True,
     )
     start_date = models.DateField(default=datetime.now, verbose_name="Действует с ")
     end_date = models.DateField(verbose_name="Окончание")

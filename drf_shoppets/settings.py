@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    #
     'mptt',
     'django_mptt_admin',
     'rest_framework',
@@ -33,13 +33,15 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'djoser',
     'drf_spectacular',
-
+    'django_extensions',
+    #
     'products.apps.ProductsConfig',
     'sellprice.apps.SellpriceConfig',
     'orders.apps.OrdersConfig',
     'users.apps.UsersConfig',
     'warehouse.apps.WarehouseConfig',
     'cart.apps.CartConfig',
+    'catalog.apps.CatalogConfig',
 
 ]
 
@@ -182,7 +184,7 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=20),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
@@ -202,8 +204,8 @@ DJOSER = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
-    'DESCRIPTION': 'Описание вашего проекта',
+    'TITLE': 'ShopPets API',
+    'DESCRIPTION': 'Магазин для животных',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }

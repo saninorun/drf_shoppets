@@ -2,6 +2,8 @@ from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 from pytils.translit import slugify
 
+from products.managers import CatalogManager
+
 
 # Create your models here.
 
@@ -36,7 +38,7 @@ class Category(MPTTModel):
     def save(self, *args, **kwargs):
         """
         Дополнение родительского метода сохранения модели в базу данных,
-        в случае отсутствия значния переменной 'slug' при заполнении  поля модели.
+        в случае отсутствия значения переменной 'slug' при заполнении поля модели.
         """
         if not self.slug:
             self.slug = slugify(self.title)
@@ -60,6 +62,9 @@ class Product(models.Model):
         verbose_name="Категория",
     )
 
+    objects = models.Manager()
+    catalog_manager = CatalogManager()
+
     class Meta:
         ordering = ("title",)
         verbose_name = "Товар"
@@ -71,7 +76,7 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         """
         Дополнение родительского метода сохранения модели в базу данных,
-        в случае отсутствия значния переменной 'slug' при заполнении поля модели.
+        в случае отсутствия значения переменной 'slug' при заполнении поля модели.
         """
 
         if not self.slug:

@@ -1,32 +1,19 @@
 from django.http import HttpRequest
-from django.shortcuts import render, get_list_or_404
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import status, viewsets, mixins
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.authentication import (
-    SessionAuthentication,
-    BasicAuthentication,
-    TokenAuthentication,
-)
-from rest_framework.decorators import (
-    api_view,
-    authentication_classes,
-    permission_classes,
-    renderer_classes,
-)
-from rest_framework.generics import CreateAPIView, ListCreateAPIView, get_object_or_404
-from rest_framework import generics
-from rest_framework.renderers import (
-    JSONRenderer,
-    TemplateHTMLRenderer,
-    BrowsableAPIRenderer,
-)
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 from products.models import Product, Category
-from products.serializers import ProductSerializer, CategorySerializer
+from products.serializers import (
+    ProductSerializer,
+    CategorySerializer,
+    ProductListSerializer,
+)
 
 
 # region api_documentation
@@ -40,18 +27,32 @@ from products.serializers import ProductSerializer, CategorySerializer
         summary="Изменение существующего товара",
     ),
     create=extend_schema(
-        summary="Добавленеи нового товара в справочник",
+        summary="Добавление нового товара в справочник",
         description="Добавить в справочник новый товар",
     ),
     retrieve=extend_schema(summary="Получение конкретного товара"),
     destroy=extend_schema(summary="Удаление конкретного товара"),
+    list_create=extend_schema(summary="Массовое загрузка товара"),
 )
 # endregion
-class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.select_related("categories").all()
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.catalog_manager.actual_price()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    renderer_classes = (TemplateHTMLRenderer, JSONRenderer)
+    # parser_classes = (JSONParser,)
     lookup_field = "slug"
+    template_name = "products/product_detail.html"
+
+    @action(detail=False, methods=["post"], name="Many create products name")
+    def list_create(self, request: HttpRequest | Request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
 
 # region api_documentation
@@ -64,19 +65,20 @@ class CategoryViewSet(viewsets.ModelViewSet):
         summary="Изменение существующей категории",
     ),
     create=extend_schema(
-        summary="Добавленеи новой категории",
+        summary="Добавление новой категории",
     ),
     retrieve=extend_schema(summary="Получение конкретной категории"),
     destroy=extend_schema(summary="Удаление категории"),
 )
 # endregion
-class ProductViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_field = "slug"
 
 
+# region testing
 # @api_view(['GET', 'POST'])
 # # @authentication_classes([JWTAuthentication, SessionAuthentication, BasicAuthentication, TokenAuthentication])
 # @permission_classes([IsAuthenticated, ])
@@ -130,3 +132,4 @@ class ProductViewSet(viewsets.ModelViewSet):
 #     serializer_class = CategorySerializer
 #     permission_classes = (IsAuthenticated,)
 #     lookup_field = 'slug'
+# endregion

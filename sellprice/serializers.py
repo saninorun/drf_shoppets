@@ -37,4 +37,3 @@ class SellDiscountSerializer(serializers.ModelSerializer):
         model = SellDiscount
         fields = ('discount', 'product', 'start_date', 'end_date')
         read_only_fields = ('product',)
-        # list_serializer_class = ProductListSerializer
