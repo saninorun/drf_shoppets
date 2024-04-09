@@ -10,4 +10,4 @@ class SellPriceAdmin(admin.ModelAdmin):
 
 @admin.register(SellDiscount)
 class SellDiscountAdmin(admin.ModelAdmin):
-    list_display = ('discount_procent', 'product', 'start_date', 'end_date')
+    list_display = ('discount_percent', 'product', 'start_date', 'end_date')

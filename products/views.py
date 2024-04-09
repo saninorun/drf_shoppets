@@ -36,7 +36,7 @@ from products.serializers import (
 )
 # endregion
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.catalog_manager.actual_price()
+    queryset = Product.catalog_manager.annotate_price_discount()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     renderer_classes = (TemplateHTMLRenderer, JSONRenderer)
