@@ -25,6 +25,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     price = serializers.IntegerField(source="price_item", read_only=True)
+    discount = serializers.IntegerField(source="discount", read_only=True)
+
     class Meta:
         model = Product
         fields = (
@@ -36,6 +38,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "slug",
             "article_number",
             "price",
+            "discount",
         )
         read_only_fields = ("slug",)
         # depth = 1

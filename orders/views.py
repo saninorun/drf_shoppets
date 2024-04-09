@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
 
-from .models import Order
+from .models import SellOrder
 from .serializers import OrderSerializer
 
 
@@ -25,8 +25,6 @@ from .serializers import OrderSerializer
 )
 # endregion
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
+    queryset = SellOrder.objects.all()
     serializer_class = OrderSerializer
-    # renderer_classes = [TemplateHTMLRenderer]
-    # template_name = 'orders/product_list.html'
     permission_classes = (IsAuthenticated,)

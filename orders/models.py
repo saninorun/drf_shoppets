@@ -1,13 +1,13 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.db.models import Q
+
 from orders import abstractmodels
 
 from products.models import Product
-from .managers import OrderManager
 
 
 class SellOrder(abstractmodels.Order):
-    objects = OrderManager()
 
     class Meta(abstractmodels.Order.Meta):
         verbose_name = "Заказ на продажу"
@@ -26,7 +26,12 @@ class SellOrderItem(abstractmodels.OrderItem):
     )
 
     class Meta(abstractmodels.OrderItem.Meta):
-        pass
+        constraints = [
+            models.CheckConstraint(
+                check=(Q(quantity__gte=0) & Q(discount_price__gte=0) & Q(price__gte=0)),
+                name="check_item",
+            ),
+        ]
 
     def __str__(self):
         return f"{self.product.title}"
